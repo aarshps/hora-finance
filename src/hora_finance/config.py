@@ -11,6 +11,7 @@ class AppConfig:
     port: int
     data_dir: Path
     db_path: Path
+    reports_dir: Path
     google_client_secret_path: Path
 
 
@@ -19,6 +20,9 @@ def load_config() -> AppConfig:
         os.environ.get("HORA_FINANCE_DATA_DIR", str(Path.home() / ".hora-finance"))
     ).expanduser()
     db_path = data_dir / "hora_finance.db"
+    reports_dir = Path(
+        os.environ.get("HORA_FINANCE_REPORTS_DIR", str(data_dir / "reports"))
+    ).expanduser()
     client_secret_default = data_dir / "google_client_secret.json"
     google_client_secret_path = Path(
         os.environ.get("HORA_FINANCE_GOOGLE_CLIENT_SECRET", str(client_secret_default))
@@ -29,9 +33,11 @@ def load_config() -> AppConfig:
         port=int(os.environ.get("HORA_FINANCE_PORT", "8765")),
         data_dir=data_dir,
         db_path=db_path,
+        reports_dir=reports_dir,
         google_client_secret_path=google_client_secret_path,
     )
 
 
 def ensure_data_dir(config: AppConfig) -> None:
     config.data_dir.mkdir(parents=True, exist_ok=True)
+    config.reports_dir.mkdir(parents=True, exist_ok=True)

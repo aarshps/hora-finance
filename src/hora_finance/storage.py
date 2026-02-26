@@ -48,7 +48,9 @@ def upsert_user(db_path: Path, user_info: dict[str, str], credentials_json: str)
     with sqlite3.connect(db_path) as conn:
         conn.execute(
             """
-            INSERT INTO users (google_sub, email, name, picture, credentials_json, created_at, updated_at)
+            INSERT INTO users (
+              google_sub, email, name, picture, credentials_json, created_at, updated_at
+            )
             VALUES (?, ?, ?, ?, ?, ?, ?)
             ON CONFLICT(google_sub) DO UPDATE SET
               email = excluded.email,
@@ -59,7 +61,10 @@ def upsert_user(db_path: Path, user_info: dict[str, str], credentials_json: str)
             """,
             (google_sub, email, name, picture, credentials_json, now, now),
         )
-        row = conn.execute("SELECT id FROM users WHERE google_sub = ?", (google_sub,)).fetchone()
+        row = conn.execute(
+            "SELECT id FROM users WHERE google_sub = ?",
+            (google_sub,),
+        ).fetchone()
         conn.commit()
 
     if row is None:
@@ -108,3 +113,19 @@ def get_active_user(db_path: Path) -> dict[str, str] | None:
     if row is None:
         return None
     return {k: (row[k] or "") for k in row.keys()}
+
+
+def get_active_credentials_json(db_path: Path) -> str | None:
+    with sqlite3.connect(db_path) as conn:
+        row = conn.execute(
+            """
+            SELECT u.credentials_json
+            FROM users u
+            JOIN active_session s ON s.user_id = u.id
+            WHERE s.id = 1
+            """
+        ).fetchone()
+
+    if row is None:
+        return None
+    return str(row[0] or "")

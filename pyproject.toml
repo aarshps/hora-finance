@@ -12,6 +12,7 @@ dependencies = [
   "flask>=3.1.0",
   "google-auth>=2.38.0",
   "google-auth-oauthlib>=1.2.1",
+  "google-api-python-client>=2.170.0",
 ]
 
 [project.optional-dependencies]
