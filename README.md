@@ -4,7 +4,7 @@ Python-based personal finance project that is private-first and open-source-read
 
 ## Python version
 
-This repo targets Python `3.14.x` and is currently pinned to `3.14.3` in `.python-version`.
+This repo targets Python `3.14.x` and is currently pinned to `3.14.2` in `.python-version`.
 
 ## Quick start
 
