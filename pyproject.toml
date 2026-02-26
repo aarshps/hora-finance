@@ -8,7 +8,11 @@ version = "0.1.0"
 description = "Personal-first finance tooling."
 readme = "README.md"
 requires-python = ">=3.14,<3.15"
-dependencies = []
+dependencies = [
+  "flask>=3.1.0",
+  "google-auth>=2.38.0",
+  "google-auth-oauthlib>=1.2.1",
+]
 
 [project.optional-dependencies]
 dev = [
